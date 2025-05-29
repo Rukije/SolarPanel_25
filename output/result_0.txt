@@ -1,0 +1,445 @@
+[
+    {
+        "robot_id": 3,
+        "tasks": [
+            {
+                "day": 2,
+                "panel_id": 66
+            },
+            {
+                "day": 2,
+                "panel_id": 48
+            },
+            {
+                "day": 2,
+                "panel_id": 67
+            },
+            {
+                "day": 2,
+                "panel_id": 12
+            },
+            {
+                "day": 3,
+                "panel_id": 75
+            },
+            {
+                "day": 3,
+                "panel_id": 37
+            },
+            {
+                "day": 3,
+                "panel_id": 90
+            },
+            {
+                "day": 3,
+                "panel_id": 76
+            },
+            {
+                "day": 4,
+                "panel_id": 88
+            },
+            {
+                "day": 4,
+                "panel_id": 56
+            },
+            {
+                "day": 4,
+                "panel_id": 96
+            },
+            {
+                "day": 4,
+                "panel_id": 60
+            },
+            {
+                "day": 5,
+                "panel_id": 40
+            },
+            {
+                "day": 5,
+                "panel_id": 85
+            },
+            {
+                "day": 5,
+                "panel_id": 49
+            },
+            {
+                "day": 5,
+                "panel_id": 39
+            },
+            {
+                "day": 6,
+                "panel_id": 3
+            },
+            {
+                "day": 6,
+                "panel_id": 11
+            },
+            {
+                "day": 6,
+                "panel_id": 8
+            },
+            {
+                "day": 6,
+                "panel_id": 62
+            },
+            {
+                "day": 7,
+                "panel_id": 27
+            },
+            {
+                "day": 7,
+                "panel_id": 80
+            },
+            {
+                "day": 7,
+                "panel_id": 29
+            },
+            {
+                "day": 7,
+                "panel_id": 42
+            },
+            {
+                "day": 8,
+                "panel_id": 10
+            },
+            {
+                "day": 8,
+                "panel_id": 83
+            },
+            {
+                "day": 8,
+                "panel_id": 28
+            },
+            {
+                "day": 8,
+                "panel_id": 0
+            },
+            {
+                "day": 9,
+                "panel_id": 95
+            },
+            {
+                "day": 9,
+                "panel_id": 73
+            },
+            {
+                "day": 9,
+                "panel_id": 74
+            },
+            {
+                "day": 9,
+                "panel_id": 58
+            },
+            {
+                "day": 10,
+                "panel_id": 23
+            },
+            {
+                "day": 10,
+                "panel_id": 15
+            },
+            {
+                "day": 10,
+                "panel_id": 34
+            },
+            {
+                "day": 10,
+                "panel_id": 78
+            },
+            {
+                "day": 11,
+                "panel_id": 25
+            },
+            {
+                "day": 11,
+                "panel_id": 70
+            },
+            {
+                "day": 11,
+                "panel_id": 13
+            },
+            {
+                "day": 11,
+                "panel_id": 30
+            },
+            {
+                "day": 12,
+                "panel_id": 64
+            },
+            {
+                "day": 12,
+                "panel_id": 22
+            },
+            {
+                "day": 12,
+                "panel_id": 63
+            },
+            {
+                "day": 12,
+                "panel_id": 94
+            },
+            {
+                "day": 13,
+                "panel_id": 33
+            },
+            {
+                "day": 13,
+                "panel_id": 16
+            },
+            {
+                "day": 13,
+                "panel_id": 43
+            },
+            {
+                "day": 13,
+                "panel_id": 31
+            },
+            {
+                "day": 14,
+                "panel_id": 53
+            },
+            {
+                "day": 14,
+                "panel_id": 92
+            },
+            {
+                "day": 14,
+                "panel_id": 68
+            },
+            {
+                "day": 14,
+                "panel_id": 99
+            },
+            {
+                "day": 15,
+                "panel_id": 97
+            },
+            {
+                "day": 15,
+                "panel_id": 77
+            },
+            {
+                "day": 15,
+                "panel_id": 55
+            },
+            {
+                "day": 15,
+                "panel_id": 57
+            }
+        ]
+    },
+    {
+        "robot_id": 6,
+        "tasks": [
+            {
+                "day": 2,
+                "panel_id": 72
+            },
+            {
+                "day": 3,
+                "panel_id": 36
+            },
+            {
+                "day": 4,
+                "panel_id": 44
+            },
+            {
+                "day": 5,
+                "panel_id": 50
+            },
+            {
+                "day": 6,
+                "panel_id": 71
+            },
+            {
+                "day": 7,
+                "panel_id": 86
+            },
+            {
+                "day": 8,
+                "panel_id": 35
+            },
+            {
+                "day": 9,
+                "panel_id": 45
+            },
+            {
+                "day": 10,
+                "panel_id": 93
+            },
+            {
+                "day": 11,
+                "panel_id": 4
+            },
+            {
+                "day": 12,
+                "panel_id": 59
+            },
+            {
+                "day": 13,
+                "panel_id": 5
+            },
+            {
+                "day": 14,
+                "panel_id": 21
+            },
+            {
+                "day": 15,
+                "panel_id": 89
+            }
+        ]
+    },
+    {
+        "robot_id": 7,
+        "tasks": [
+            {
+                "day": 2,
+                "panel_id": 84
+            },
+            {
+                "day": 2,
+                "panel_id": 6
+            },
+            {
+                "day": 2,
+                "panel_id": 32
+            },
+            {
+                "day": 3,
+                "panel_id": 20
+            },
+            {
+                "day": 3,
+                "panel_id": 47
+            },
+            {
+                "day": 3,
+                "panel_id": 26
+            },
+            {
+                "day": 4,
+                "panel_id": 79
+            },
+            {
+                "day": 4,
+                "panel_id": 98
+            },
+            {
+                "day": 4,
+                "panel_id": 41
+            },
+            {
+                "day": 5,
+                "panel_id": 46
+            },
+            {
+                "day": 5,
+                "panel_id": 7
+            },
+            {
+                "day": 5,
+                "panel_id": 65
+            },
+            {
+                "day": 6,
+                "panel_id": 1
+            },
+            {
+                "day": 6,
+                "panel_id": 9
+            },
+            {
+                "day": 6,
+                "panel_id": 51
+            },
+            {
+                "day": 7,
+                "panel_id": 91
+            },
+            {
+                "day": 7,
+                "panel_id": 54
+            },
+            {
+                "day": 7,
+                "panel_id": 19
+            },
+            {
+                "day": 8,
+                "panel_id": 52
+            },
+            {
+                "day": 8,
+                "panel_id": 14
+            },
+            {
+                "day": 8,
+                "panel_id": 87
+            },
+            {
+                "day": 9,
+                "panel_id": 69
+            },
+            {
+                "day": 9,
+                "panel_id": 81
+            },
+            {
+                "day": 9,
+                "panel_id": 82
+            },
+            {
+                "day": 10,
+                "panel_id": 61
+            },
+            {
+                "day": 10,
+                "panel_id": 17
+            },
+            {
+                "day": 10,
+                "panel_id": 18
+            },
+            {
+                "day": 11,
+                "panel_id": 24
+            },
+            {
+                "day": 11,
+                "panel_id": 2
+            },
+            {
+                "day": 11,
+                "panel_id": 38
+            }
+        ]
+    },
+    {
+        "robot_id": 2,
+        "tasks": []
+    },
+    {
+        "robot_id": 5,
+        "tasks": []
+    },
+    {
+        "robot_id": 0,
+        "tasks": []
+    },
+    {
+        "robot_id": 1,
+        "tasks": []
+    },
+    {
+        "robot_id": 4,
+        "tasks": []
+    },
+    {
+        "robot_id": 8,
+        "tasks": []
+    },
+    {
+        "robot_id": 9,
+        "tasks": []
+    }
+]

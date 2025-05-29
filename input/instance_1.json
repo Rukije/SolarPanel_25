@@ -1,37 +1,21 @@
 {
-    "num_panels": 6,
-    "num_robots": 2,
-    "time_limit": 10,
-    "panel_scores": [
-        235,
-        70,
-        928,
-        33,
-        881,
-        339
-    ],
-    "cleaning_times": [
-        1,
-        5,
-        2,
-        3,
-        4,
-        2
-    ],
-    "robots": [
-        {
-            "id": 0,
-            "cleaning_capacity": 5,
-            "recharge_time": 1,
-            "energy_capacity": 19,
-            "initial_position": 4
-        },
-        {
-            "id": 1,
-            "cleaning_capacity": 5,
-            "recharge_time": 2,
-            "energy_capacity": 11,
-            "initial_position": 3
-        }
-    ]
+  "N": 10,
+  "M": 2,
+  "T": 7,
+  "panel_importance": [9,7,5,10,4,6,8,7,5,6],
+  "robots": [
+    {
+      "clean_capacity": 3,
+      "recharge_time": 2,
+      "energy_capacity": 12,
+      "start_pos": 0
+    },
+    {
+      "clean_capacity": 2,
+      "recharge_time": 3,
+      "energy_capacity": 15,
+      "start_pos": 1
+    }
+  ],
+  "cleaning_times": [2,3,1,4,2,2,3,2,1,3]
 }
