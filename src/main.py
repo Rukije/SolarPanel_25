@@ -30,17 +30,15 @@ def main(input_file, output_file):
     print("Done!")
 
 if __name__ == "__main__":
-    # Check command line arguments, else use defaults
     if len(sys.argv) == 3:
         input_path = sys.argv[1]
         output_path = sys.argv[2]
     else:
         print("Usage: python main.py <input_file.json> <output_file.json>")
         print("No arguments detected, using default input/output files for demo.")
-        input_path = "../input/instance_small.json"  # adjust as needed
-        output_path = "../output/result_small.json"  # adjust as needed
+        input_path = "../input/instance_small.json"  
+        output_path = "../output/result_small.json" 
 
-    # Run main process
     try:
         main(input_path, output_path)
     except Exception as e:
