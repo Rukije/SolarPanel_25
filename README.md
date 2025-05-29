@@ -2,7 +2,7 @@
 
 ## Introductory Information
 
-![University Logo](https://github.com/user-attachments/assets/9002855f-3f97-4b41-a180-85d1e24ad34a)
+<img src="https://github.com/user-attachments/assets/9002855f-3f97-4b41-a180-85d1e24ad34a" alt="University Logo" width="150" align="right"/>
 
 **University of Prishtina**  
 **Faculty of Computer and Software Engineering**  
@@ -72,17 +72,17 @@ The goal of this project is to schedule routes, cleaning, and charging times for
 
 ![Solar Panel](assets/Robot0.png)
 
-• Robot 0 requires 2 hours to fully recharge before starting cleaning,
-• Robot 1 requires 3 hours to fully recharge,
-• Robot 1 starts recharging before Robot 0,
+- Robot 0 requires 2 hours to fully recharge before starting cleaning,
+- Robot 1 requires 3 hours to fully recharge,
+- Robot 1 starts recharging before Robot 0,
 then
-• The recharge process of Robot 1 starts on hour 0, and finishes on hour 3
+- The recharge process of Robot 1 starts on hour 0, and finishes on hour 3
 (3 hours total),
-• Robot 1 can start cleaning panels beginning at hour 3 (immediately after 
+- Robot 1 can start cleaning panels beginning at hour 3 (immediately after 
 recharge completes),
-• The recharge of Robot 0 starts on hour 3 (right after Robot 1 finishes) and 
+- The recharge of Robot 0 starts on hour 3 (right after Robot 1 finishes) and 
 finishes on hour 5 (2 hours total),
-• Robot 0 can start cleaning panels beginning at hour 5.
+- Robot 0 can start cleaning panels beginning at hour 5.
 
 
 **Detailed Timeline:**
@@ -98,28 +98,28 @@ finishes on hour 5 (2 hours total),
 
 ![Solar Panel](assets/Robot1.png)
 The process for solar panel cleaning would look like this:
-• All panels are cleaned by the robots in the cleaning facility 
-• The entire process of moving robots to panels, cleaning them, and 
+- All panels are cleaned by the robots in the cleaning facility 
+- The entire process of moving robots to panels, cleaning them, and 
 returning to charging stations happens over a series of days.
-• Each robot can clean a specific number of panels per day, and there’s a 
+- Each robot can clean a specific number of panels per day, and there’s a 
 maximum number of panels that can be cleaned per day by each robot.
-• Time constraints: The robots must also manage their energy usage by 
+- Time constraints: The robots must also manage their energy usage by 
 recharging, which can affect the number of panels they can clean each 
 day.
 Example for Solar Panel Cleaning:
-• Robot 0 needs to clean 5 panels.
-• Robot 0 can clean 2 panels per day.
-• Robot 0 completes its signup/recharge process on day 1.
+- Robot 0 needs to clean 5 panels.
+- Robot 0 can clean 2 panels per day.
+- Robot 0 completes its signup/recharge process on day 1.
 Then:
-• Day 2: Robot 0 can clean 2 panels.
-• Day 3: Robot 0 can clean 2 panels again.
-• Day 4: The one remaining panel can be cleaned.
+- Day 2: Robot 0 can clean 2 panels.
+- Day 3: Robot 0 can clean 2 panels again.
+- Day 4: The one remaining panel can be cleaned.
 Example for Solar Panel Cleaning
-• Robot 0 has 5 panels to clean and can clean 2 panels per day.
-• Day 1: The robot starts its recharge process 
-• Day 2: Robot 0 can clean 2 panels.
-• Day 3: Robot 0 can clean 2 more panels.
-• Day 4: The remaining 1 panel is cleaned.
+- Robot 0 has 5 panels to clean and can clean 2 panels per day.
+- Day 1: The robot starts its recharge process 
+- Day 2: Robot 0 can clean 2 panels.
+- Day 3: Robot 0 can clean 2 more panels.
+- Day 4: The remaining 1 panel is cleaned.
 
 ## Input Data Format
 
