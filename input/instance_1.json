@@ -1,0 +1,37 @@
+{
+    "num_panels": 6,
+    "num_robots": 2,
+    "time_limit": 10,
+    "panel_scores": [
+        235,
+        70,
+        928,
+        33,
+        881,
+        339
+    ],
+    "cleaning_times": [
+        1,
+        5,
+        2,
+        3,
+        4,
+        2
+    ],
+    "robots": [
+        {
+            "id": 0,
+            "cleaning_capacity": 5,
+            "recharge_time": 1,
+            "energy_capacity": 19,
+            "initial_position": 4
+        },
+        {
+            "id": 1,
+            "cleaning_capacity": 5,
+            "recharge_time": 2,
+            "energy_capacity": 11,
+            "initial_position": 3
+        }
+    ]
+}

@@ -1,0 +1,79 @@
+{
+    "num_panels": 20,
+    "num_robots": 4,
+    "time_limit": 12,
+    "panel_scores": [
+        827,
+        417,
+        195,
+        97,
+        100,
+        675,
+        442,
+        363,
+        434,
+        421,
+        479,
+        885,
+        747,
+        56,
+        690,
+        670,
+        662,
+        101,
+        63,
+        413
+    ],
+    "cleaning_times": [
+        3,
+        1,
+        2,
+        2,
+        2,
+        5,
+        4,
+        2,
+        4,
+        2,
+        3,
+        4,
+        2,
+        1,
+        4,
+        5,
+        1,
+        1,
+        5,
+        1
+    ],
+    "robots": [
+        {
+            "id": 0,
+            "cleaning_capacity": 1,
+            "recharge_time": 1,
+            "energy_capacity": 10,
+            "initial_position": 13
+        },
+        {
+            "id": 1,
+            "cleaning_capacity": 4,
+            "recharge_time": 2,
+            "energy_capacity": 11,
+            "initial_position": 12
+        },
+        {
+            "id": 2,
+            "cleaning_capacity": 1,
+            "recharge_time": 1,
+            "energy_capacity": 14,
+            "initial_position": 0
+        },
+        {
+            "id": 3,
+            "cleaning_capacity": 4,
+            "recharge_time": 2,
+            "energy_capacity": 20,
+            "initial_position": 14
+        }
+    ]
+}
