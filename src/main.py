@@ -22,7 +22,6 @@ def main(input_file, output_file):
     score = compute_score(instance, schedules)
     print(f"Solution score: {score}")
 
-    # Save schedules to JSON output
     print(f"Saving output to: {output_file}")
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     with open(output_file, 'w') as f:
@@ -36,8 +35,8 @@ if __name__ == "__main__":
     else:
         print("Usage: python main.py <input_file.json> <output_file.json>")
         print("No arguments detected, using default input/output files for demo.")
-        input_path = "../input/instance_small.json"  
-        output_path = "../output/result_small.json" 
+        input_path = "../input/instance_1.json"  
+        output_path = "../output/result_1.json" 
 
     try:
         main(input_path, output_path)
