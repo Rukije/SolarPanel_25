@@ -158,16 +158,53 @@ After the robots' descriptions, each panel's cleaning time is provided on a sepa
 
 ## Scoring
 
-Your score is the sum of the scores of all panels that are cleaned within the available time `T`. Note that if the same panel is cleaned by multiple robots within the allowed time, the solution will be accepted, but the score for that panel will only be awarded once.
+The score is the sum of the scores of all panels that are cleaned within the available time `T`.  
+If the same panel is cleaned by multiple robots within the allowed time, the solution is accepted, but the score for that panel is only counted once.
 
 ### Capacity and Energy Considerations
 
-- **Cleaning Capacity**: Each robot can clean a specific number of panels per day. If a robot’s capacity is exceeded, it will not be able to clean more panels that day.
-- **Energy Consumption**: Robots consume energy when traveling between panels and cleaning them. If a robot’s energy is depleted, it must recharge before continuing its cleaning tasks. The recharge time is also considered in the total available time `T`.
-- **Recharge Time**: When a robot requires recharge, it will not be able to clean any panels until it has enough energy to continue.
-- **Cleaning the Same Panel**: If a robot cleans the same panel multiple times, only the first cleaning counts towards the score, as the panel's score is counted only once.
+- **Cleaning Capacity**: Each robot can clean a limited number of panels per day. If a robot’s capacity is exceeded, it cannot clean additional panels that day.
+- **Energy Consumption**: Robots use energy when traveling between panels and cleaning them. If a robot’s energy runs out, it must recharge before resuming cleaning. Recharge time is included in the total available time `T`.
+- **Recharge Time**: Robots cannot clean panels while recharging. They must wait until they have enough energy to continue.
+- **Cleaning the Same Panel**: If a robot cleans the same panel multiple times, only the first cleaning counts toward the score.
 
 ---
+
+### Example Results
+
+When you run `run_all_instances.py`, you will see output similar to:
+
+```
+...
+This file has run with 10*5 - large data
+Running SolarSweep_Alpha_1.json...
+Solution score: 7127019
+...
+Running PanelPatrol_Beta_2.json...
+Solution score: 34
+...
+Running CleanGrid_Gamma_3.json...
+Solution score: 78
+...
+Running SunTrackers_Mu_4.json...
+Solution score: 7127019
+
+...
+Running RoboShine_Nu_5.json...
+Solution score: 122
+
+...
+
+Running HelioClean_Omicron_6.json...
+Solution score: 159
+
+
+Each instance is processed, validated, and its score is displayed. Results are saved in the `output` folder, with each file named according to the input instance.
+
+---
+
+**Note:**  
+Scores may vary significantly between instances, especially for larger ones like `SolarSweep_Alpha_1.json`, which can produce much higher scores due to the increased number of panels.
 
 
 
