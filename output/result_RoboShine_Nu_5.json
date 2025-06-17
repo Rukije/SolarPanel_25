@@ -3,63 +3,71 @@
     {
       "start_time": 0,
       "end_time": 3,
-      "panel": 0,
+      "panel": 6,
       "action": "clean"
     },
     {
       "start_time": 3,
       "end_time": 7,
-      "panel": 8,
-      "action": "clean"
-    },
-    {
-      "start_time": 7,
-      "end_time": 10,
-      "panel": 17,
-      "action": "clean"
-    },
-    {
-      "start_time": 10,
-      "end_time": 12,
-      "panel": 1,
+      "panel": 13,
       "action": "clean"
     }
   ],
   "1": [
     {
       "start_time": 0,
-      "end_time": 3,
-      "panel": 7,
+      "end_time": 2,
+      "panel": 2,
       "action": "clean"
     },
     {
-      "start_time": 3,
-      "end_time": 5,
-      "panel": 16,
+      "start_time": 2,
+      "end_time": 6,
+      "panel": 23,
       "action": "clean"
     },
     {
-      "start_time": 5,
-      "end_time": 8,
-      "panel": 24,
+      "start_time": 6,
+      "end_time": 10,
+      "panel": 8,
       "action": "clean"
     }
   ],
   "2": [
     {
       "start_time": 0,
-      "end_time": 3,
-      "panel": 2,
+      "end_time": 2,
+      "panel": 0,
       "action": "clean"
     },
     {
-      "start_time": 3,
-      "end_time": 6,
+      "start_time": 2,
+      "end_time": 5,
+      "panel": 16,
+      "action": "clean"
+    },
+    {
+      "start_time": 5,
+      "end_time": 7,
       "panel": 5,
+      "action": "clean"
+    },
+    {
+      "start_time": 7,
+      "end_time": 9,
+      "panel": 15,
       "action": "clean"
     }
   ],
   "3": [
+    {
+      "start_time": 0,
+      "end_time": 3,
+      "panel": 24,
+      "action": "clean"
+    }
+  ],
+  "4": [
     {
       "start_time": 0,
       "end_time": 2,
@@ -68,26 +76,26 @@
     },
     {
       "start_time": 2,
-      "end_time": 5,
-      "panel": 15,
+      "end_time": 4,
+      "panel": 17,
       "action": "clean"
     },
     {
-      "start_time": 5,
-      "end_time": 7,
-      "panel": 21,
-      "action": "clean"
-    },
-    {
-      "start_time": 7,
-      "end_time": 9,
+      "start_time": 4,
+      "end_time": 6,
       "panel": 25,
       "action": "clean"
     },
     {
+      "start_time": 6,
+      "end_time": 9,
+      "panel": 1,
+      "action": "clean"
+    },
+    {
       "start_time": 9,
-      "end_time": 10,
-      "panel": 29,
+      "end_time": 12,
+      "panel": 11,
       "action": "clean"
     }
   ]
