@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Solar Panel Cleaning Simulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6fb; margin: 0; }
+    .container { max-width: 1200px; margin: 30px auto; background: #fff; padding: 32px; border-radius: 18px; box-shadow: 0 4px 24px #b0b8c1; }
+    h1 { text-align: center; margin-bottom: 24px; }
+    .input-section { margin-bottom: 32px; text-align: center; }
+    .score-box { text-align: center; font-size: 1.3em; margin-bottom: 18px; color: #6c63ff; font-weight: bold; }
+    .instance-summary { margin: 24px 0 32px 0; background: #e3eafc; border-radius: 10px; padding: 18px 24px; }
+    .summary-list { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
+    .summary-item { font-size: 1.1em; }
+    .grid-label { text-align: center; font-size: 1.2em; color: #607d8b; margin-bottom: 8px; margin-top: 10px; letter-spacing: 1px; }
+    .grid-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; }
+    .panel-grid { display: grid; grid-gap: 8px; background: #f0f4fa; border-radius: 10px; padding: 18px; position: relative; min-width: 120px; }
+    .panel-cell { width: 60px; height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 8px; font-size: 1em; font-weight: bold; position: relative; transition: box-shadow 0.3s, border 0.3s, background 0.3s; cursor: pointer; }
+    .panel-type-standard { background: #e0f7fa; border: 2px solid #00bcd4; }
+    .panel-type-fragile { background: #ffe0b2; border: 2px solid #ff9800; }
+    .panel-type-high-efficiency { background: #dcedc8; border: 2px solid #8bc34a; }
+    .panel-label { font-size: 0.8em; color: #333; }
+    .panel-importance { font-size: 1.1em; }
+    .panel-cleaning { box-shadow: 0 0 18px 6px #ffd600; border: 3px solid #ffd600 !important; background: #fffde7 !important; }
+    .panel-done { background: #c8e6c9 !important; border: 2px solid #388e3c !important; }
+    .panel-tooltip {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fffbe7;
+      color: #333;
+      border: 1px solid #ffd600;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 0.95em;
+      box-shadow: 0 2px 8px #e0e3e8;
+      z-index: 20;
+      transition: opacity 0.2s;
+      min-width: 120px;
+      text-align: left;
+      white-space: pre-line;
+    }
+    .panel-cell:hover .panel-tooltip {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .robots-label { text-align: center; font-size: 1.1em; color: #607d8b; margin-bottom: 8px; margin-top: 18px; letter-spacing: 1px; }
+    .robots-row { display: flex; justify-content: center; gap: 18px; margin-top: 8px; position: relative; flex-wrap: wrap; }
+    .robot-card { background: #f9fafc; border-radius: 12px; box-shadow: 0 2px 8px #e0e3e8; padding: 10px 14px; display: flex; flex-direction: column; align-items: center; min-width: 110px; margin-bottom: 10px; }
+    .robot-type-fast { border-left: 6px solid #2196f3; }
+    .robot-type-heavy { border-left: 6px solid #388e3c; }
+    .robot-type-eco { border-left: 6px solid #ffd600; }
+    .robot-type-mini { border-left: 6px solid #e91e63; }
+    .robot-type-standard { border-left: 6px solid #607d8b; }
+    .robot-icon { font-size: 2em; }
+    .robot-label { font-weight: bold; color: #6c63ff; margin-bottom: 2px; }
+    .robot-info { font-size: 0.95em; }
+    .robot-state { font-size: 1em; font-weight: bold; margin: 4px 0 2px 0; }
+    .robot-battery { width: 60px; height: 14px; border: 1px solid #bbb; border-radius: 4px; margin: 2px 0 6px 0; background: #eee; position: relative; }
+    .robot-battery-bar { height: 100%; border-radius: 4px; background: #8bc34a; transition: width 0.3s, background 0.3s; }
+    .robot-battery-low .robot-battery-bar { background: #ff9800; }
+    .robot-battery-empty .robot-battery-bar { background: #e53935; }
+    .day-box { text-align: center; font-size: 1.2em; margin-bottom: 12px; color: #607d8b; }
+    .sim-controls { text-align: center; margin-bottom: 18px; }
+    .sim-btn { background: #6c63ff; color: #fff; border: none; border-radius: 6px; padding: 8px 18px; font-size: 1em; cursor: pointer; margin: 0 8px; }
+    .sim-btn:active { background: #4b47b5; }
+    @media (max-width: 700px) {
+      .container { padding: 10px; }
+      .panel-cell { width: 38px; height: 38px; font-size: 0.8em; }
+      .robot-card { min-width: 70px; padding: 6px 4px; }
+      .robot-battery { width: 36px; height: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Solar Panel Cleaning Simulator</h1>
+    <div class="input-section">
+      <label for="fileInput"><strong>Import Instance JSON:</strong></label>
+      <input type="file" id="fileInput" accept=".json">
+    </div>
+    <div id="scoreBox" class="score-box"></div>
+    <div id="instanceSummary" class="instance-summary"></div>
+    <div class="day-box" id="dayBox"></div>
+    <div class="sim-controls">
+      <button class="sim-btn" id="prevDayBtn">Prev Day</button>
+      <button class="sim-btn" id="nextDayBtn">Next Day</button>
+      <button class="sim-btn" id="playBtn">Play</button>
+      <button class="sim-btn" id="pauseBtn">Pause</button>
+    </div>
+    <div class="grid-area">
+      <div class="grid-label">Solar Panel Grid</div>
+      <div id="panelGrid" class="panel-grid"></div>
+      <div class="robots-label">Robots</div>
+      <div id="robotsRow" class="robots-row"></div>
+    </div>
+  </div>
+  <script>
+    function generateMockSchedules(data) {
+      const schedules = [];
+      const panels = data.panels || [];
+      const robots = data.robots || [];
+      let day = 1;
+      let panelIdx = 0;
+      for (let r = 0; r < robots.length; r++) {
+        let robotPanels = [];
+        let battery = robots[r].energy_capacity || 5;
+        let cap = robots[r].clean_capacity || 1;
+        let chargeTime = robots[r].recharge_time || 1;
+        let cleaned = 0;
+        while (panelIdx < panels.length) {
+          if (battery <= 0) {
+            for (let c = 0; c < chargeTime; c++) {
+              robotPanels.push({panel: null, day: day++, action: "charge"});
+            }
+            battery = robots[r].energy_capacity || 5;
+            continue;
+          }
+          robotPanels.push({panel: panels[panelIdx].id, day: day++, action: "clean"});
+          battery -= 1;
+          cleaned += 1;
+          panelIdx++;
+          if (cleaned >= cap) break;
+        }
+        schedules.push(robotPanels);
+      }
+      return schedules;
+    }
+
+    const instanceScores = {
+      "SolarSweep_Alpha_1.json": 7127019,
+      "PanelPatrol_Beta_2.json": 34,
+      "CleanGrid_Gamma_3.json": 97,
+      "SunTrackers_Mu_4.json": 69,
+      "RoboShine_Nu_5.json": 225,
+      "HelioClean_Omicron_6.json": 283
+    };
+
+    function getPanelTypeClass(type) {
+      if (type === "fragile") return "panel-type-fragile";
+      if (type === "high-efficiency") return "panel-type-high-efficiency";
+      return "panel-type-standard";
+    }
+    function getPanelIcon(type) {
+      if (type === "fragile") return "🧊";
+      if (type === "high-efficiency") return "⚡";
+      return "🔆";
+    }
+    function getRobotTypeClass(type) {
+      if (type === "fast") return "robot-type-fast";
+      if (type === "heavy") return "robot-type-heavy";
+      if (type === "eco") return "robot-type-eco";
+      if (type === "mini") return "robot-type-mini";
+      return "robot-type-standard";
+    }
+    function getRobotIcon(type) {
+      if (type === "fast") return "🚀";
+      if (type === "heavy") return "🦾";
+      if (type === "eco") return "🌱";
+      if (type === "mini") return "🤖";
+      return "🤖";
+    }
+
+    let simData = null;
+    let simDay = 1;
+    let simMaxDay = 1;
+    let simInterval = null;
+
+    function renderSimulation() {
+      if (!simData) return;
+      const panelGrid = document.getElementById('panelGrid');
+      panelGrid.innerHTML = '';
+      let panels = simData.panels;
+      let maxX = Math.max(...panels.map(p => p.x));
+      let maxY = Math.max(...panels.map(p => p.y));
+      panelGrid.style.gridTemplateColumns = `repeat(${maxY+1}, 60px)`;
+      panelGrid.style.gridTemplateRows = `repeat(${maxX+1}, 60px)`;
+      panels.forEach(panel => {
+        const cell = document.createElement('div');
+        let state = "";
+        if (panel.cleanedDay && panel.cleanedDay < simDay) state = "panel-done";
+        else if (panel.cleanedDay === simDay) state = "panel-cleaning";
+        cell.className = `panel-cell ${getPanelTypeClass(panel.type)} ${state}`;
+        cell.style.gridColumn = (panel.y+1);
+        cell.style.gridRow = (panel.x+1);
+        cell.innerHTML = `
+          <div class="panel-label">#${panel.id}</div>
+          <div>${getPanelIcon(panel.type)}</div>
+          <div class="panel-importance">${panel.importance !== undefined ? panel.importance : (panel.score !== undefined ? panel.score : '')}</div>
+          <div class="panel-tooltip">
+            <b>Panel #${panel.id}</b><br>
+            <b>Type:</b> ${panel.type || 'standard'}<br>
+            <b>Importance:</b> ${panel.importance !== undefined ? panel.importance : (panel.score !== undefined ? panel.score : '')}<br>
+            <b>Position:</b> [${panel.x}, ${panel.y}]
+          </div>
+        `;
+        panelGrid.appendChild(cell);
+      });
+
+      // Robots
+      const robotsRow = document.getElementById('robotsRow');
+      robotsRow.innerHTML = '';
+      simData.robots.forEach((robot, idx) => {
+        const state = robot.state || "idle";
+        let batteryClass = "";
+        if (robot.battery === 0) batteryClass = "robot-battery-empty";
+        else if (robot.battery <= (robot.energy_capacity || 1) / 3) batteryClass = "robot-battery-low";
+        const card = document.createElement('div');
+        card.className = `robot-card ${getRobotTypeClass(robot.type)}`;
+        card.innerHTML = `
+          <div class="robot-icon">${getRobotIcon(robot.type)}</div>
+          <div class="robot-label">Robot #${robot.id !== undefined ? robot.id : idx+1}</div>
+          <div class="robot-state">${state.charAt(0).toUpperCase() + state.slice(1)}</div>
+          <div class="robot-battery ${batteryClass}">
+            <div class="robot-battery-bar" style="width:${(robot.battery/(robot.energy_capacity||1))*100}%;"></div>
+          </div>
+          <div class="robot-info"><b>Start:</b> ${robot.start_pos !== undefined ? robot.start_pos : ''}</div>
+          <div class="robot-info"><b>Cap:</b> ${robot.clean_capacity !== undefined ? robot.clean_capacity : ''}</div>
+          <div class="robot-info"><b>Energy:</b> ${robot.energy_capacity !== undefined ? robot.energy_capacity : ''}</div>
+          <div class="robot-info"><b>Recharge:</b> ${robot.recharge_time !== undefined ? robot.recharge_time : ''}</div>
+          <div class="robot-info"><b>Type:</b> ${robot.type || 'standard'}</div>
+        `;
+        robotsRow.appendChild(card);
+      });
+
+      // Day
+      document.getElementById('dayBox').innerHTML = `Day: <b>${simDay}</b> / ${simMaxDay}`;
+    }
+
+    function stepSimulation(dir=1) {
+      if (!simData) return;
+      simDay += dir;
+      if (simDay < 1) simDay = 1;
+      if (simDay > simMaxDay) simDay = simMaxDay;
+      updateSimState();
+      renderSimulation();
+    }
+
+    function playSimulation() {
+      if (simInterval) return;
+      simInterval = setInterval(() => {
+        if (simDay >= simMaxDay) { pauseSimulation(); return; }
+        stepSimulation(1);
+      }, 1200);
+    }
+    function pauseSimulation() {
+      if (simInterval) clearInterval(simInterval);
+      simInterval = null;
+    }
+
+    function updateSimState() {
+      simData.panels.forEach(p => { p.cleanedDay = null; });
+      simData.robots.forEach(r => { r.state = "idle"; r.battery = r.energy_capacity; });
+
+      simData.robots.forEach((robot, ridx) => {
+        let battery = robot.energy_capacity;
+        let schedule = simData.robot_schedules[ridx] || [];
+        for (let i = 0; i < schedule.length; i++) {
+          let step = schedule[i];
+          if (step.day > simDay) break;
+          if (step.action === "clean" && step.panel !== null) {
+            let panel = simData.panels.find(p => p.id === step.panel);
+            if (panel) panel.cleanedDay = step.day;
+            battery -= 1;
+            if (step.day === simDay) robot.state = "cleaning";
+          } else if (step.action === "charge") {
+            battery = robot.energy_capacity;
+            if (step.day === simDay) robot.state = "charging";
+          }
+        }
+        robot.battery = Math.max(0, battery);
+        if (!robot.state || robot.state === "idle") robot.state = "idle";
+      });
+    }
+
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const data = JSON.parse(event.target.result);
+          const filename = file.name;
+
+          // Show score if available
+          const score = instanceScores[filename];
+          document.getElementById('scoreBox').innerHTML = score !== undefined
+            ? `Solution Score: <span style="color:#388e3c">${score}</span>`
+            : '';
+
+          // Summary
+          let summary = `<h2>Instance Summary</h2><div class="summary-list">`;
+          if (data.N) summary += `<div class="summary-item"><b>Panels (N):</b> ${data.N}</div>`;
+          if (data.M) summary += `<div class="summary-item"><b>Robots (M):</b> ${data.M}</div>`;
+          if (data.T) summary += `<div class="summary-item"><b>Total Time (T):</b> ${data.T}</div>`;
+          if (data.panel_importance) summary += `<div class="summary-item"><b>Panel Importance:</b> [${data.panel_importance.join(', ')}]</div>`;
+          if (data.cleaning_times) summary += `<div class="summary-item"><b>Cleaning Times:</b> [${data.cleaning_times.join(', ')}]</div>`;
+          summary += `</div>`;
+          document.getElementById('instanceSummary').innerHTML = summary;
+
+          // Panels
+          let panels = [];
+          if (data.panels) {
+            panels = data.panels.map(p => ({
+              ...p,
+              x: p.pos ? p.pos[0] : (p.position ? p.position[0] : 0),
+              y: p.pos ? p.pos[1] : (p.position ? p.position[1] : 0)
+            }));
+          } else if (data.panel_positions && data.panel_importance) {
+            panels = data.panel_positions.map((pos, idx) => ({
+              id: idx,
+              x: pos[0],
+              y: pos[1],
+              importance: data.panel_importance[idx],
+              type: "standard"
+            }));
+          }
+
+          // Robots
+          let robots = (data.robots || []).map((r, idx) => ({
+            ...r,
+            id: r.id !== undefined ? r.id : idx+1,
+            battery: r.energy_capacity,
+            state: "idle"
+          }));
+
+          // Schedules (mock if not present)
+          let robot_schedules = data.robot_schedules || generateMockSchedules({panels, robots});
+
+          // Find max day
+          let maxDay = 1;
+          robot_schedules.forEach(sched => {
+            if (sched.length > 0) maxDay = Math.max(maxDay, sched[sched.length-1].day);
+          });
+
+          simData = {panels, robots, robot_schedules};
+          simDay = 1;
+          simMaxDay = maxDay;
+          updateSimState();
+          renderSimulation();
+        } catch (err) {
+          document.getElementById('scoreBox').innerHTML = '';
+          document.getElementById('instanceSummary').innerHTML = `<span style="color:red;">Invalid JSON file!</span>`;
+          document.getElementById('panelGrid').innerHTML = '';
+          document.getElementById('robotsRow').innerHTML = '';
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    document.getElementById('nextDayBtn').onclick = () => stepSimulation(1);
+    document.getElementById('prevDayBtn').onclick = () => stepSimulation(-1);
+    document.getElementById('playBtn').onclick = () => playSimulation();
+    document.getElementById('pauseBtn').onclick = () => pauseSimulation();
+  </script>
+</body>
+</html>
