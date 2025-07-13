@@ -11,7 +11,7 @@ def main(input_file, output_file):
     instance = load_instance(input_file)
 
     print("Running solver...")
-    schedules = schedule_robots(instance)
+    schedules, energy_used_per_robot = schedule_robots(instance)
 
     print("Validating solution...")
     valid, message = validate_solution(instance, schedules)
@@ -24,8 +24,14 @@ def main(input_file, output_file):
 
     print(f"Saving output to: {output_file}")
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    output_data = {
+         "move_energy_cost": instance.get("move_energy_cost", 1),
+         "schedules": schedules,
+         "energy_used_per_robot": energy_used_per_robot
+    }
     with open(output_file, 'w') as f:
-        json.dump(schedules, f, indent=2)
+        json.dump(output_data, f, indent=2)
+
     print("Done!")
 
 if __name__ == "__main__":
