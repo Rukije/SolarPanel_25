@@ -100,46 +100,6 @@
     </div>
   </div>
   <script>
-    function generateMockSchedules(data) {
-      const schedules = [];
-      const panels = data.panels || [];
-      const robots = data.robots || [];
-      let day = 1;
-      let panelIdx = 0;
-      for (let r = 0; r < robots.length; r++) {
-        let robotPanels = [];
-        let battery = robots[r].energy_capacity || 5;
-        let cap = robots[r].clean_capacity || 1;
-        let chargeTime = robots[r].recharge_time || 1;
-        let cleaned = 0;
-        while (panelIdx < panels.length) {
-          if (battery <= 0) {
-            for (let c = 0; c < chargeTime; c++) {
-              robotPanels.push({panel: null, day: day++, action: "charge"});
-            }
-            battery = robots[r].energy_capacity || 5;
-            continue;
-          }
-          robotPanels.push({panel: panels[panelIdx].id, day: day++, action: "clean"});
-          battery -= 1;
-          cleaned += 1;
-          panelIdx++;
-          if (cleaned >= cap) break;
-        }
-        schedules.push(robotPanels);
-      }
-      return schedules;
-    }
-
-    const instanceScores = {
-      "SolarSweep_Alpha_1.json": 7127019,
-      "PanelPatrol_Beta_2.json": 34,
-      "CleanGrid_Gamma_3.json": 97,
-      "SunTrackers_Mu_4.json": 69,
-      "RoboShine_Nu_5.json": 225,
-      "HelioClean_Omicron_6.json": 283
-    };
-
     function getPanelTypeClass(type) {
       if (type === "fragile") return "panel-type-fragile";
       if (type === "high-efficiency") return "panel-type-high-efficiency";
@@ -209,6 +169,16 @@
         let batteryClass = "";
         if (robot.battery === 0) batteryClass = "robot-battery-empty";
         else if (robot.battery <= (robot.energy_capacity || 1) / 3) batteryClass = "robot-battery-low";
+
+        // Get energy and position info from results if available
+        let energyInfo = (simData.energy_used_per_robot && simData.energy_used_per_robot[idx]) || {};
+        let positions = energyInfo.positions || [];
+        let startPos = energyInfo.start_position || robot.start_pos;
+        let moveEnergy = energyInfo.move_energy_used || 0;
+        let cleanEnergy = energyInfo.clean_energy_used || 0;
+        let totalEnergy = energyInfo.total_energy_used || 0;
+        let solarNeeded = energyInfo.solar_energy_needed || robot.energy_capacity;
+
         const card = document.createElement('div');
         card.className = `robot-card ${getRobotTypeClass(robot.type)}`;
         card.innerHTML = `
@@ -218,9 +188,13 @@
           <div class="robot-battery ${batteryClass}">
             <div class="robot-battery-bar" style="width:${(robot.battery/(robot.energy_capacity||1))*100}%;"></div>
           </div>
-          <div class="robot-info"><b>Start:</b> ${robot.start_pos !== undefined ? robot.start_pos : ''}</div>
+          <div class="robot-info"><b>Start Position:</b> [${startPos}]</div>
+          <div class="robot-info"><b>Visited:</b> ${positions.map(p => `[${p}]`).join(', ')}</div>
+          <div class="robot-info"><b>Move Energy:</b> ${moveEnergy}</div>
+          <div class="robot-info"><b>Clean Energy:</b> ${cleanEnergy}</div>
+          <div class="robot-info"><b>Total Energy:</b> ${totalEnergy}</div>
+          <div class="robot-info"><b>Solar Needed:</b> ${solarNeeded}</div>
           <div class="robot-info"><b>Cap:</b> ${robot.clean_capacity !== undefined ? robot.clean_capacity : ''}</div>
-          <div class="robot-info"><b>Energy:</b> ${robot.energy_capacity !== undefined ? robot.energy_capacity : ''}</div>
           <div class="robot-info"><b>Recharge:</b> ${robot.recharge_time !== undefined ? robot.recharge_time : ''}</div>
           <div class="robot-info"><b>Type:</b> ${robot.type || 'standard'}</div>
         `;
@@ -287,6 +261,14 @@
           const filename = file.name;
 
           // Show score if available
+          const instanceScores = {
+            "SolarSweep_Alpha_1.json": 7127019,
+            "PanelPatrol_Beta_2.json": 34,
+            "CleanGrid_Gamma_3.json": 97,
+            "SunTrackers_Mu_4.json": 69,
+            "RoboShine_Nu_5.json": 225,
+            "HelioClean_Omicron_6.json": 283
+          };
           const score = instanceScores[filename];
           document.getElementById('scoreBox').innerHTML = score !== undefined
             ? `Solution Score: <span style="color:#388e3c">${score}</span>`
@@ -329,7 +311,10 @@
           }));
 
           // Schedules (mock if not present)
-          let robot_schedules = data.robot_schedules || generateMockSchedules({panels, robots});
+          let robot_schedules = data.robot_schedules || [];
+          if (robot_schedules.length === 0) {
+            robot_schedules = generateMockSchedules({panels, robots});
+          }
 
           // Find max day
           let maxDay = 1;
@@ -337,7 +322,13 @@
             if (sched.length > 0) maxDay = Math.max(maxDay, sched[sched.length-1].day);
           });
 
+          // Attach energy info if present
+          let energy_used_per_robot = data.energy_used_per_robot || null;
+
           simData = {panels, robots, robot_schedules};
+          if (energy_used_per_robot) {
+            simData.energy_used_per_robot = energy_used_per_robot;
+          }
           simDay = 1;
           simMaxDay = maxDay;
           updateSimState();
@@ -351,6 +342,37 @@
       };
       reader.readAsText(file);
     });
+
+    function generateMockSchedules(data) {
+      const schedules = [];
+      const panels = data.panels || [];
+      const robots = data.robots || [];
+      let day = 1;
+      let panelIdx = 0;
+      for (let r = 0; r < robots.length; r++) {
+        let robotPanels = [];
+        let battery = robots[r].energy_capacity || 5;
+        let cap = robots[r].clean_capacity || 1;
+        let chargeTime = robots[r].recharge_time || 1;
+        let cleaned = 0;
+        while (panelIdx < panels.length) {
+          if (battery <= 0) {
+            for (let c = 0; c < chargeTime; c++) {
+              robotPanels.push({panel: null, day: day++, action: "charge"});
+            }
+            battery = robots[r].energy_capacity || 5;
+            continue;
+          }
+          robotPanels.push({panel: panels[panelIdx].id, day: day++, action: "clean"});
+          battery -= 1;
+          cleaned += 1;
+          panelIdx++;
+          if (cleaned >= cap) break;
+        }
+        schedules.push(robotPanels);
+      }
+      return schedules;
+    }
 
     document.getElementById('nextDayBtn').onclick = () => stepSimulation(1);
     document.getElementById('prevDayBtn').onclick = () => stepSimulation(-1);

@@ -1,3 +1,7 @@
+import os
+import json
+
+
 def compute_score(instance, schedules):
     panel_importance = instance['panel_importance']
 
@@ -23,3 +27,26 @@ def compute_score(instance, schedules):
 
     total_score = base_score + cluster_bonus
     return total_score
+
+
+if __name__ == "__main__":
+    input_folder = "../input"
+    output_folder = "../output"
+
+    for filename in os.listdir(input_folder):
+        if filename.endswith(".json"):
+            input_file = os.path.join(input_folder, filename)
+            result_file = os.path.join(output_folder, f"result_{os.path.splitext(filename)[0]}.json")
+
+            if not os.path.exists(result_file):
+                print(f"Result file not found for {filename}")
+                continue
+
+            with open(input_file) as f:
+                instance = json.load(f)
+            with open(result_file) as f:
+                result = json.load(f)
+
+            schedules = result.get("schedules", {})
+            score = compute_score(instance, schedules)
+            print(f"{filename}: Score = {score}")
