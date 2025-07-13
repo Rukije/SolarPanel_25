@@ -1,56 +1,133 @@
 {
-  "0": [
+  "schedules": {
+    "0": [
+      {
+        "action": "clean",
+        "panel": 8,
+        "start_time": 8,
+        "end_time": 11,
+        "position": [
+          0,
+          8
+        ]
+      },
+      {
+        "action": "clean",
+        "panel": 3,
+        "start_time": 16,
+        "end_time": 19,
+        "position": [
+          0,
+          3
+        ]
+      }
+    ],
+    "1": [
+      {
+        "action": "clean",
+        "panel": 7,
+        "start_time": 0,
+        "end_time": 4,
+        "position": [
+          0,
+          7
+        ]
+      },
+      {
+        "action": "clean",
+        "panel": 16,
+        "start_time": 13,
+        "end_time": 17,
+        "position": [
+          0,
+          16
+        ]
+      }
+    ],
+    "2": [
+      {
+        "action": "clean",
+        "panel": 0,
+        "start_time": 14,
+        "end_time": 16,
+        "position": [
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "energy_used_per_robot": [
     {
-      "start_time": 0,
-      "end_time": 3,
-      "panel": 8,
-      "action": "clean"
+      "robot_id": 0,
+      "total_energy_used": 15,
+      "move_energy_used": 13,
+      "clean_energy_used": 2,
+      "positions": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          8
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "start_position": [
+        0,
+        0
+      ],
+      "solar_energy_needed": 16
     },
     {
-      "start_time": 3,
-      "end_time": 6,
-      "panel": 3,
-      "action": "clean"
+      "robot_id": 1,
+      "total_energy_used": 11,
+      "move_energy_used": 9,
+      "clean_energy_used": 2,
+      "positions": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          16
+        ]
+      ],
+      "start_position": [
+        0,
+        7
+      ],
+      "solar_energy_needed": 18
     },
     {
-      "start_time": 6,
-      "end_time": 10,
-      "panel": 7,
-      "action": "clean"
-    }
-  ],
-  "1": [
-    {
-      "start_time": 0,
-      "end_time": 4,
-      "panel": 16,
-      "action": "clean"
-    },
-    {
-      "start_time": 4,
-      "end_time": 6,
-      "panel": 0,
-      "action": "clean"
-    },
-    {
-      "start_time": 6,
-      "end_time": 9,
-      "panel": 6,
-      "action": "clean"
-    }
-  ],
-  "2": [
-    {
-      "start_time": 0,
-      "end_time": 2,
-      "panel": 13,
-      "action": "clean"
-    },
-    {
-      "start_time": 2,
-      "end_time": 5,
-      "panel": 17,
-      "action": "clean"
+      "robot_id": 2,
+      "total_energy_used": 15,
+      "move_energy_used": 14,
+      "clean_energy_used": 1,
+      "positions": [
+        [
+          0,
+          14
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "start_position": [
+        0,
+        14
+      ],
+      "solar_energy_needed": 15
     }
   ]
 }

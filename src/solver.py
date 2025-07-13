@@ -146,106 +146,80 @@ def schedule_robots(instance):
     N = instance['N']
     M = instance['M']
     T = instance['T']
-    panels = list(range(N))
     panel_importance = instance['panel_importance']
     cleaning_times = instance['cleaning_times']
     robots = instance['robots']
-    panel_positions = instance['panel_positions']
-    move_energy_cost = instance.get('move_energy_cost', 1)
-    standby_energy_cost = instance.get('standby_energy_cost', 0)
 
-    panel_coords = {i: tuple(pos) for i, pos in enumerate(panel_positions)}
+    # Shembull: panel_coords = [(x, y) për çdo panel]
+    panel_coords = [(0, i) for i in range(N)]  # ose merr nga instance nëse ka
 
     schedules = {r: [] for r in range(M)}
     panels_cleaned = set()
-
-    robot_states = []
-    for r in robots:
-        robot_states.append({
-            'available_time': 0,
-            'energy_left': r['energy_capacity'],
-            'clean_capacity': r['clean_capacity'],
-            'recharge_time': r['recharge_time'],
-            'current_position': panel_coords[r['start_pos']],
-            'start_position': panel_coords[r['start_pos']],
-            'move_energy_used': 0,
-            'clean_energy_used': 0
-        })
-
-    for ridx, robot in enumerate(robot_states):
-        remaining_panels = [p for p in panels if p not in panels_cleaned]
-
-        while robot['clean_capacity'] > 0 and robot['available_time'] < T and remaining_panels:
-            def panel_score(panel):
-                imp = panel_importance[panel]
-                dist = abs(robot['current_position'][0] - panel_coords[panel][0]) + abs(robot['current_position'][1] - panel_coords[panel][1])
-                return imp / (1 + dist)
-
-            best_panel = max(remaining_panels, key=panel_score)
-            panel_pos = panel_coords[best_panel]
-            cleaning_time = cleaning_times[best_panel]
-
-            curr_x, curr_y = robot['current_position']
-            target_x, target_y = panel_pos
-            manhattan_distance = abs(curr_x - target_x) + abs(curr_y - target_y)
-            move_energy = manhattan_distance * move_energy_cost
-            move_time = manhattan_distance
-
-            total_energy_needed = move_energy + cleaning_time
-            total_time_needed = move_time + cleaning_time
-
-            if robot['energy_left'] >= total_energy_needed and robot['available_time'] + total_time_needed <= T:
-                robot['energy_left'] -= move_energy
-                robot['move_energy_used'] += move_energy
-                robot['available_time'] += move_time
-                robot['current_position'] = panel_pos
-
-                schedules[ridx].append({
-                    'start_time': robot['available_time'],
-                    'end_time': robot['available_time'] + cleaning_time,
-                    'panel': best_panel,
-                    'action': 'clean'
-                })
-                robot['available_time'] += cleaning_time
-                robot['energy_left'] -= cleaning_time
-                robot['clean_energy_used'] += cleaning_time
-                robot['clean_capacity'] -= 1
-
-                panels_cleaned.add(best_panel)
-                remaining_panels.remove(best_panel)
-            else:
-                home_x, home_y = robot['start_position']
-                back_distance = abs(curr_x - home_x) + abs(curr_y - home_y)
-                back_energy = back_distance * move_energy_cost
-
-                if robot['energy_left'] >= back_energy:
-                    robot['energy_left'] -= back_energy
-                    robot['move_energy_used'] += back_energy
-                    robot['available_time'] += back_distance
-                    robot['current_position'] = (home_x, home_y)
-                else:
-                    robot['clean_capacity'] = 0
-                    break
-
-                robot['available_time'] += robot['recharge_time']
-                robot['energy_left'] = robots[ridx]['energy_capacity']
-
     energy_used_per_robot = []
-    for ridx, robot in enumerate(robot_states):
-        active_time = sum([task['end_time'] - task['start_time'] for task in schedules[ridx]])
-        idle_time = robot['available_time'] - active_time
-        standby_energy = idle_time * standby_energy_cost
 
-        total_energy_used = robot['move_energy_used'] + robot['clean_energy_used'] + standby_energy
+    move_energy_cost = 1  # ose merr nga instance nëse ka
+    clean_energy_cost = 1  # ose merr nga instance nëse ka
+
+    for ridx, robot in enumerate(robots):
+        energy_left = robot['energy_capacity']
+        clean_capacity = robot['clean_capacity']
+        recharge_time = robot['recharge_time']
+        current_pos = panel_coords[robot['start_pos']]
+        positions = [current_pos]  # fillon me pozicionin fillestar
+        move_energy = 0
+        clean_energy = 0
+        time = 0
+
+        for panel_id in sorted(range(N), key=lambda x: -panel_importance[x]):
+            if panel_id in panels_cleaned or clean_capacity <= 0 or time >= T:
+                continue
+            target_pos = panel_coords[panel_id]
+            dist = abs(current_pos[0] - target_pos[0]) + abs(current_pos[1] - target_pos[1])
+            move_e = move_energy_cost * dist
+            clean_e = clean_energy_cost
+
+            if energy_left < move_e + clean_e:
+                # Recharge
+                time += recharge_time
+                energy_left = robot['energy_capacity']
+                continue
+
+            # Move
+            move_energy += move_e
+            energy_left -= move_e
+            time += dist
+            current_pos = target_pos
+            positions.append(current_pos)
+
+            # Clean
+            clean_energy += clean_e
+            energy_left -= clean_e
+            time += cleaning_times[panel_id]
+            clean_capacity -= 1
+            panels_cleaned.add(panel_id)
+
+            schedules[ridx].append({
+                "action": "clean",
+                "panel": panel_id,
+                "start_time": time - cleaning_times[panel_id],
+                "end_time": time,
+                "position": current_pos
+            })
+
         energy_used_per_robot.append({
-            'robot_id': ridx,
-            'total_energy_used': total_energy_used,
-            'move_energy_used': robot['move_energy_used'],
-            'clean_energy_used': robot['clean_energy_used'],
+            "robot_id": ridx,
+            "total_energy_used": move_energy + clean_energy,
+            "move_energy_used": move_energy,
+            "clean_energy_used": clean_energy,
+            "positions": positions,
+            "start_position": panel_coords[robot['start_pos']],
+            "solar_energy_needed": robot['energy_capacity']
         })
 
-    return schedules, energy_used_per_robot
+    return {
+        "schedules": schedules,
+        "energy_used_per_robot": energy_used_per_robot
+    }
 
-   
 
-   
+

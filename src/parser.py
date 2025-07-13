@@ -4,13 +4,11 @@ def load_instance(file_path):
     with open(file_path, 'r') as f:
         data = json.load(f)
     
-    # Basic validation
     required_keys = ['N', 'M', 'T', 'panel_importance', 'robots', 'cleaning_times']
     for key in required_keys:
         if key not in data:
             raise ValueError(f"Missing key {key} in input file.")
     
-    # Validate types and lengths
     if len(data['panel_importance']) != data['N']:
         raise ValueError("panel_importance length does not match N.")
     if len(data['cleaning_times']) != data['N']:
@@ -18,7 +16,6 @@ def load_instance(file_path):
     if len(data['robots']) != data['M']:
         raise ValueError("robots length does not match M.")
     
-    # Validate each robot has required fields
     for idx, robot in enumerate(data['robots']):
         for rkey in ['clean_capacity', 'recharge_time', 'energy_capacity', 'start_pos']:
             if rkey not in robot:

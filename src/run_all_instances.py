@@ -5,6 +5,10 @@ def run_all_instances():
     input_folder = "../input"
     output_folder = "../output"
 
+    # Create output folder if it doesn't exist
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
     # List all .json files in the input folder
     for filename in os.listdir(input_folder):
         if filename.endswith(".json"):
