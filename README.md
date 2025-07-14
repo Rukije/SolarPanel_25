@@ -212,6 +212,16 @@ After the robots' descriptions, each panel's cleaning time is provided on a sepa
 The score is the sum of the scores of all panels that are cleaned within the available time `T`.  
 If the same panel is cleaned by multiple robots within the allowed time, the solution is accepted, but the score for that panel is only counted once.
 
+| Robot Type           | Move Energy | Clean Energy | Total Energy | Score    |
+|----------------------|-------------|--------------|--------------|----------|
+| Clean Grid Gama      | 25          | 6            | 31           | 78       |
+| Helio Clean Omicron  | 11          | 88           | 99           | 158      |
+| Panel Patrol Beta    | 3           | 10           | 13           | 27       |
+| Robot Shine          | 7           | 53           | 60           | 120      |
+| Solar Sweep Alpha    | 7,157       | 88,700       | 95,857       | 6,389,599|
+| Sun Trackers         | 5           | 36           | 41           | 45       |
+
+
 ### Capacity and Energy Considerations
 
 - **Cleaning Capacity**: Each robot can clean a limited number of panels per day. If a robot’s capacity is exceeded, it cannot clean additional panels that day.
