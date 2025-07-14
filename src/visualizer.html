@@ -172,11 +172,35 @@
 
         // Get energy and position info from results if available
         let energyInfo = (simData.energy_used_per_robot && simData.energy_used_per_robot[idx]) || {};
-        let positions = energyInfo.positions || [];
         let startPos = energyInfo.start_position || robot.start_pos;
-        let moveEnergy = energyInfo.move_energy_used || 0;
-        let cleanEnergy = energyInfo.clean_energy_used || 0;
-        let totalEnergy = energyInfo.total_energy_used || 0;
+
+        // --- Calculate stats up to current day ---
+        let schedule = simData.robot_schedules[idx] || [];
+        let positionsDay = [];
+        let moveEnergyDay = 0;
+        let cleanEnergyDay = 0;
+        let totalEnergyDay = 0;
+        let lastPos = Array.isArray(startPos) ? startPos : [startPos, 0];
+        if (Array.isArray(lastPos) && lastPos.length === 2) {
+          positionsDay.push(lastPos);
+        }
+        for (let i = 0; i < schedule.length; i++) {
+          let step = schedule[i];
+          if (step.day > simDay) break;
+          if (step.action === "clean" && step.panel !== null) {
+            let panel = simData.panels.find(p => p.id === step.panel);
+            if (panel) {
+              // Calculate move energy (Manhattan distance)
+              let prev = positionsDay[positionsDay.length-1];
+              let dist = Math.abs(panel.x - prev[0]) + Math.abs(panel.y - prev[1]);
+              moveEnergyDay += dist;
+              cleanEnergyDay += 1; // or use panel.clean_energy_cost if available
+              totalEnergyDay = moveEnergyDay + cleanEnergyDay;
+              positionsDay.push([panel.x, panel.y]);
+              lastPos = [panel.x, panel.y];
+            }
+          }
+        }
         let solarNeeded = energyInfo.solar_energy_needed || robot.energy_capacity;
 
         const card = document.createElement('div');
@@ -189,11 +213,11 @@
             <div class="robot-battery-bar" style="width:${(robot.battery/(robot.energy_capacity||1))*100}%;"></div>
           </div>
           <div class="robot-info"><b>Start Position:</b> [${startPos}]</div>
-          <div class="robot-info"><b>Visited:</b> ${positions.map(p => `[${p}]`).join(', ')}</div>
-          <div class="robot-info"><b>Move Energy:</b> ${moveEnergy}</div>
-          <div class="robot-info"><b>Clean Energy:</b> ${cleanEnergy}</div>
-          <div class="robot-info"><b>Total Energy:</b> ${totalEnergy}</div>
-          <div class="robot-info"><b>Solar Needed:</b> ${solarNeeded}</div>
+          <div class="robot-info"><b>Visited:</b> ${positionsDay.map(p => `[${p}]`).join(', ')}</div>
+          <div class="robot-info"><b>Move Energy Used:</b> ${moveEnergyDay}</div>
+          <div class="robot-info"><b>Clean Energy Used:</b> ${cleanEnergyDay}</div>
+          <div class="robot-info"><b>Total Energy Used:</b> ${totalEnergyDay}</div>
+          <div class="robot-info"><b>Solar Energy Needed:</b> ${solarNeeded}</div>
           <div class="robot-info"><b>Cap:</b> ${robot.clean_capacity !== undefined ? robot.clean_capacity : ''}</div>
           <div class="robot-info"><b>Recharge:</b> ${robot.recharge_time !== undefined ? robot.recharge_time : ''}</div>
           <div class="robot-info"><b>Type:</b> ${robot.type || 'standard'}</div>
